@@ -1,0 +1,57 @@
+# File: .github/workflows/terraform-deployment.yml
+name: "Terraform AWS Deployment"
+
+# Kích hoạt workflow khi có push hoặc pull request lên nhánh main
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  terraform:
+    name: "Terraform Plan and Apply"
+    runs-on: ubuntu-latest
+
+    steps:
+      # Bước 1: Checkout repository để lấy mã nguồn
+      - name: "Checkout repository"
+        uses: actions/checkout@v2
+
+      # Bước 2: Thiết lập Terraform
+      - name: "Set up Terraform"
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.0.0
+
+      # Bước 3: Khởi tạo Terraform
+      - name: "Terraform Init"
+        run: terraform init
+
+      # Bước 4: Lên kế hoạch triển khai với Terraform
+      - name: "Terraform Plan"
+        run: terraform plan -out=tfplan
+
+      # Bước 5: Triển khai hạ tầng nếu nhánh là main
+      - name: "Terraform Apply"
+        if: github.ref == 'refs/heads/main'
+        run: terraform apply -auto-approve tfplan
+
+  checkov:
+    name: "Run Checkov"
+    runs-on: ubuntu-latest
+    
+    steps:
+      # Bước 1: Checkout repository
+      - name: "Checkout repository"
+        uses: actions/checkout@v2
+
+      # Bước 2: Cài đặt Checkov để kiểm tra bảo mật mã Terraform
+      - name: "Install Checkov"
+        run: pip install checkov
+
+      # Bước 3: Chạy Checkov để quét mã Terraform
+      - name: "Run Checkov on Terraform code"
+        run: checkov -d .
