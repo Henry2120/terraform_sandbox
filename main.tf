@@ -33,7 +33,7 @@ module "ec2" {
   instance_type       = "t2.micro"
   public_subnet_id    = module.vpc.public_subnet_id
   private_subnet_id   = module.vpc.private_subnet_id
-  security_group_id   = module.security_group.public_sg_id
+  security_group_id   = module.security_group.public_sg_id  # Use the output here
   public_instance_name = "PublicEC2Instance"
   private_instance_name = "PrivateEC2Instance"
 }

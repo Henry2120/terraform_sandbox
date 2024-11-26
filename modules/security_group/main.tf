@@ -1,5 +1,6 @@
 resource "aws_security_group" "public_sg" {
-  vpc_id = var.vpc_id
+  vpc_id      = var.vpc_id
+  description = "Security group for public access with SSH and all outbound traffic"
 
   ingress {
     from_port   = 22
@@ -17,12 +18,15 @@ resource "aws_security_group" "public_sg" {
     description = "Allow all outbound traffic"
   }
 
-  tags = { Name = var.public_sg_name }
+  tags = {
+    Name = var.public_sg_name
+  }
 }
 
 
 resource "aws_security_group" "private_sg" {
   vpc_id = var.vpc_id
+  description = "Security group for private access with SSH and all outbound traffic"
 
   ingress {
     from_port       = 22
