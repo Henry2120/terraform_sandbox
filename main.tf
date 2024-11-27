@@ -11,6 +11,7 @@ module "vpc" {
   public_rt_name       = "PublicRouteTable"
 }
 
+
 module "nat_gateway" {
   source          = "./modules/nat_gateway"
   public_subnet_id = module.vpc.public_subnet_id
@@ -33,7 +34,8 @@ module "ec2" {
   instance_type       = "t2.micro"
   public_subnet_id    = module.vpc.public_subnet_id
   private_subnet_id   = module.vpc.private_subnet_id
-  security_group_id   = module.security_group.public_sg_id  # Use the output here
+  security_group_id   = module.security_group.public_sg_id
   public_instance_name = "PublicEC2Instance"
   private_instance_name = "PrivateEC2Instance"
+  ec2_instance_profile_name = aws_iam_instance_profile.ec2_instance_profile.name  # Pass the IAM instance profile here
 }

@@ -22,14 +22,16 @@ resource "aws_instance" "public_instance" {
     volume_size = 20           # Specify the size in GB
     encrypted   = true
   }
+
+  iam_instance_profile = var.ec2_instance_profile_name  # Add the IAM instance profile here
 }
 
 resource "aws_instance" "private_instance" {
   ami                    = var.ami
   instance_type          = var.instance_type
-  subnet_id              = var.public_subnet_id
+  subnet_id              = var.private_subnet_id
   vpc_security_group_ids = [var.security_group_id]
-  tags                   = { Name = var.public_instance_name }
+  tags                   = { Name = var.private_instance_name }
 
   # Enable detailed monitoring
   monitoring             = true
@@ -54,4 +56,6 @@ resource "aws_instance" "private_instance" {
     volume_size = 20           # Specify the size in GB
     encrypted   = true
   }
+
+  iam_instance_profile = var.ec2_instance_profile_name  # Add the IAM instance profile here
 }

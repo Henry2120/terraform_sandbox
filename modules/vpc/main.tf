@@ -5,6 +5,7 @@ resource "aws_vpc" "main_vpc" {
   }
 }
 
+# Public Subnet
 resource "aws_subnet" "public_subnet" {
   vpc_id                  = aws_vpc.main_vpc.id
   cidr_block              = var.public_subnet_cidr
@@ -13,6 +14,7 @@ resource "aws_subnet" "public_subnet" {
   tags = { Name = var.public_subnet_name }
 }
 
+# Private Subnet
 resource "aws_subnet" "private_subnet" {
   vpc_id            = aws_vpc.main_vpc.id
   cidr_block        = var.private_subnet_cidr
@@ -20,11 +22,13 @@ resource "aws_subnet" "private_subnet" {
   tags = { Name = var.private_subnet_name }
 }
 
+# Internet Gateway
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.main_vpc.id
   tags = { Name = var.igw_name }
 }
 
+# Public Route Table
 resource "aws_route_table" "public_rt" {
   vpc_id = aws_vpc.main_vpc.id
   route {
@@ -33,3 +37,4 @@ resource "aws_route_table" "public_rt" {
   }
   tags = { Name = var.public_rt_name }
 }
+

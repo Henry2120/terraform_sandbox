@@ -1,5 +1,5 @@
 resource "aws_eip" "nat_eip" {
-  depends_on = [aws_internet_gateway.igw]
+  domain = "vpc"  # This ensures that the EIP is associated with a VPC
 }
 
 resource "aws_nat_gateway" "nat_gw" {
